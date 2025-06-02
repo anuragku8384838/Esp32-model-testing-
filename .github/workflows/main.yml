@@ -1,4 +1,7 @@
-name: Compile ESP32 INO
+permissions:
+  contents: read
+  actions: read
+  name: Compile ESP32 INO
 
 on:
   workflow_dispatch:
