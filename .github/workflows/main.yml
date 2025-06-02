@@ -1,0 +1,47 @@
+name: Compile ESP32 INO
+
+on:
+  push:
+    paths:
+      - '**/*.ino'
+      - '**/*.zip'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+
+      - name: Install Arduino CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+          sudo mv bin/arduino-cli /usr/local/bin/
+
+      - name: Set up Arduino CLI
+        run: |
+          arduino-cli config init
+          arduino-cli core update-index
+          arduino-cli core install esp32:esp32
+
+      - name: Install libraries
+        run: |
+          unzip ei-anuragku48944994-project-1-arduino-1.0.5.zip -d libraries/
+          mv libraries/ei-anuragku48944994-project-1-arduino-1.0.5/* libraries/
+          arduino-cli lib install --git-url https://github.com/espressif/arduino-esp32.git
+
+      - name: Compile sketch
+        run: |
+          mkdir -p build
+          arduino-cli compile --fqbn esp32:esp32:esp32 model_test_INMP441.ino --output-dir build
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: compiled-bin
+          path: build/*.bin
