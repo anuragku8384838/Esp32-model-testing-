@@ -1,11 +1,12 @@
-name: Compile ESP32 INO
+name: build
 
 on:
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  actions: read
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -15,11 +16,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Arduino CLI
-        uses: arduino/setup-arduino-cli@v1
-        with:
-          version: 0.34.2
-
       - name: Install ESP32 board support
         run: |
           arduino-cli core update-index
@@ -27,10 +23,12 @@ jobs:
 
       - name: Compile the sketch
         run: |
-          arduino-cli compile --fqbn esp32:esp32:esp32 model_test_INMP441.ino
+          arduino-cli compile --fqbn esp32:esp32:esp32 \
+            --output-dir build \
+            model_test_INMP441/model_test_INMP441.ino
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload firmware binary
+        uses: actions/upload-artifact@v3
         with:
-          name: compiled-esp32
-          path: build/esp32.esp32.esp32/
+          name: firmware-bin
+          path: build/*.bin
