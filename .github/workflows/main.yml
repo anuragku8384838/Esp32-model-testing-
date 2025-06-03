@@ -16,6 +16,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Install Arduino CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+          echo "$HOME/bin" >> $GITHUB_PATH
+
       - name: Install ESP32 board support
         run: |
           arduino-cli core update-index
@@ -28,7 +33,7 @@ jobs:
             model_test_INMP441/model_test_INMP441.ino
 
       - name: Upload firmware binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: firmware-bin
           path: build/*.bin
