@@ -28,7 +28,7 @@ jobs:
             model_test_INMP441/model_test_INMP441.ino
 
       - name: Upload firmware binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: firmware-bin
           path: build/*.bin
