@@ -12,25 +12,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Arduino CLI
-      uses: arduino/setup-arduino-cli@v1
-      with:
-        version: latest
+      - name: Set up Arduino CLI
+        uses: arduino/setup-arduino-cli@v1
+        with:
+          version: latest
 
-    - name: Install ESP32 board support
-      run: |
-        arduino-cli core update-index
-        arduino-cli core install esp32:esp32
+      - name: Install ESP32 board support
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install esp32:esp32
 
-    - name: Compile the sketch
-      run: |
-        arduino-cli compile --fqbn esp32:esp32:esp32 YOUR_SKETCH_FOLDER
+      - name: Compile the sketch
+        run: |
+          arduino-cli compile --fqbn esp32:esp32:esp32 model_test_INMP441.ino
 
-    - name: Upload build artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: compiled-esp32
-        path: YOUR_SKETCH_FOLDER/build/esp32.esp32.esp32/
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-esp32
+          path: build/esp32.esp32.esp32/
