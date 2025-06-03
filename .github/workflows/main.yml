@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.5.3
 
       - name: Install Arduino CLI
         run: |
@@ -33,7 +33,7 @@ jobs:
             model_test_INMP441/model_test_INMP441.ino
 
       - name: Upload firmware binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.3
         with:
           name: firmware-bin
           path: build/*.bin
